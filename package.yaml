@@ -26,6 +26,7 @@ dependencies:
     - filepath >= 1.4.2
     - process >= 1.6.19
     - containers >= 0.6.7
+    - split >= 0.2.5
 
 ghc-options:
     - -Wall
