@@ -49,6 +49,7 @@ executable haoc
       Command.Download
       Command.Parse
       Command.Run
+      Command.Setup
       Solver
       Util
       Paths_haoc

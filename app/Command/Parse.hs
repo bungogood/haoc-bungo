@@ -4,7 +4,7 @@ import Options.Applicative
 
 -- Define the Command data type
 data Command
-  = Setup {year :: Maybe Int, day :: Maybe Int}
+  = Setup {puzzleDay :: PuzzleDay}
   | Download {downloadType :: DownloadType}
   | Run {puzzleDay :: PuzzleDay, input :: Maybe FilePath}
   | Cookie {cookie :: String}
@@ -30,26 +30,7 @@ puzzleDayParser =
 
 -- Parser for "setup" subcommand
 setupParser :: Parser Command
-setupParser =
-  Setup
-    <$> optional
-      ( option
-          auto
-          ( long "year"
-              <> short 'y'
-              <> metavar "YEAR"
-              <> help "Specify the year (default: current year)"
-          )
-      )
-    <*> optional
-      ( option
-          auto
-          ( long "day"
-              <> short 'd'
-              <> metavar "DAY"
-              <> help "Specify the day (default: current day)"
-          )
-      )
+setupParser = Setup <$> puzzleDayParser
 
 data DownloadType
   = DownloadDay PuzzleDay -- No arguments, download today's puzzle

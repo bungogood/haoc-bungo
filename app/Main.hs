@@ -6,12 +6,13 @@ import Command.Cookie (writeCookie)
 import Command.Download (download)
 import Command.Parse (Command (..), parseCommand)
 import Command.Run (run)
+import Command.Setup (setup)
 
 main :: IO ()
 main = do
   command <- parseCommand
   case command of
-    Setup {..} -> putStrLn $ "Setup for year: " ++ show year ++ ", day: " ++ show day
+    Setup {..} -> setup puzzleDay
     Download {..} -> download downloadType
     Run {..} -> run puzzleDay input
     Cookie {..} -> writeCookie cookie
