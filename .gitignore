@@ -11,6 +11,7 @@ dist-newstyle/
 dist/
 .stack-work/
 *~
+haoc.cabal
 
 # Advent of Code
 puzzle/
