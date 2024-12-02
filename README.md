@@ -1,4 +1,6 @@
-# aoc
+# Haoc
+
+Happy Advent of Code! This is a Haskell project to solve the Advent of Code puzzles.
 
 ## Each Day
 

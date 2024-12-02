@@ -1,6 +1,6 @@
-name: aoc
+name: haoc
 version: 0.1.0.0
-github: bungogood/aoc
+github: bungogood/haoc
 license: MIT
 author: Jonathan Good
 maintainer: github@bungogood.com
@@ -16,12 +16,16 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description: Please see the README on GitHub at <https://github.com/githubuser/aoc#readme>
+description: Please see the README on GitHub at <https://github.com/bungogood/haoc#readme>
 
 dependencies:
     - base >= 4.7 && < 5
     - optparse-applicative
     - time >= 1.12
+    - directory >= 1.3.8
+    - filepath >= 1.4.2
+    - process >= 1.6.19
+    - containers >= 0.6.7
 
 ghc-options:
     - -Wall
@@ -38,7 +42,7 @@ library:
     source-dirs: src
 
 executables:
-    aoc-exe:
+    haoc:
         main: Main.hs
         source-dirs: app
         ghc-options:
@@ -46,10 +50,10 @@ executables:
             - -rtsopts
             - -with-rtsopts=-N
         dependencies:
-            - aoc
+            - haoc
 
 tests:
-    aoc-test:
+    haoc-test:
         main: Spec.hs
         source-dirs: test
         ghc-options:
@@ -57,4 +61,4 @@ tests:
             - -rtsopts
             - -with-rtsopts=-N
         dependencies:
-            - aoc
+            - haoc
