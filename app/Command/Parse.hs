@@ -1,4 +1,4 @@
-module Command.Parse (Command (..), parseCommand, DownloadType (..), RunType (..)) where
+module Command.Parse (Command (..), parseCommand, DownloadType (..), PuzzleDay (..)) where
 
 import Options.Applicative
 
@@ -6,9 +6,27 @@ import Options.Applicative
 data Command
   = Setup {year :: Maybe Int, day :: Maybe Int}
   | Download {downloadType :: DownloadType}
-  | Run {runType :: RunType, input :: Maybe FilePath}
+  | Run {puzzleDay :: PuzzleDay, input :: Maybe FilePath}
   | Cookie {cookie :: String}
   deriving (Show)
+
+data PuzzleDay = Today | Specific Int Int deriving (Show)
+
+puzzleDayParser :: Parser PuzzleDay
+puzzleDayParser =
+  pure Today
+    <|> ( Specific
+            <$> argument
+              auto
+              ( metavar "YEAR"
+                  <> help "Specify the year (e.g., 2024)"
+              )
+            <*> argument
+              auto
+              ( metavar "DAY"
+                  <> help "Specify the day (e.g., 04)"
+              )
+        )
 
 -- Parser for "setup" subcommand
 setupParser :: Parser Command
@@ -34,47 +52,30 @@ setupParser =
       )
 
 data DownloadType
-  = DownloadToday -- No arguments, download today's puzzle
+  = DownloadDay PuzzleDay -- No arguments, download today's puzzle
   | DownloadYear Int -- Explicit --full flag with a year
-  | DownloadDay Int Int -- Specific year and day
   deriving (Show)
 
 -- Parser for "download" subcommand
 downloadParser :: Parser Command
 downloadParser =
   Download
-    <$> ( DownloadYear
-            <$> option
-              auto
-              ( long "full"
-                  <> help "Download all puzzles for the specified year"
-                  <> metavar "YEAR"
-              )
-              <|> ( DownloadDay
-                      <$> argument
-                        auto
-                        ( metavar "YEAR"
-                            <> help "Specify the year (e.g., 2024)"
-                        )
-                      <*> argument
-                        auto
-                        ( metavar "DAY"
-                            <> help "Specify the day (e.g., 04)"
-                        )
-                  )
-              <|> pure DownloadToday
+    <$> ( ( DownloadYear
+              <$> option
+                auto
+                ( long "full"
+                    <> help "Download all puzzles for the specified year"
+                    <> metavar "YEAR"
+                )
+          )
+            <|> (DownloadDay <$> puzzleDayParser)
         )
-
-data RunType
-  = RunToday -- No arguments, run today's puzzle
-  | RunDay Int Int -- Specific year and day
-  deriving (Show)
 
 -- Parser for "run" subcommand
 runParser :: Parser Command
 runParser =
   Run
-    <$> (runTodayParser <|> runDayParser)
+    <$> puzzleDayParser
     <*> optional
       ( strOption
           ( long "input"
@@ -82,25 +83,6 @@ runParser =
               <> metavar "FILE"
               <> help "Specify the input file (optional)"
           )
-      )
-
--- Parser for running today's puzzle
-runTodayParser :: Parser RunType
-runTodayParser = pure RunToday
-
--- Parser for running a specific year and day
-runDayParser :: Parser RunType
-runDayParser =
-  RunDay
-    <$> argument
-      auto
-      ( metavar "YEAR"
-          <> help "Specify the year (e.g., 2024)"
-      )
-    <*> argument
-      auto
-      ( metavar "DAY"
-          <> help "Specify the day (e.g., 04)"
       )
 
 cookieParser :: Parser Command

@@ -2,17 +2,19 @@ module Command.Download (download) where
 
 -- Import ExitCode
 
-import Command.Parse (DownloadType (DownloadDay, DownloadToday, DownloadYear))
+import Command.Parse (DownloadType (..), PuzzleDay (..))
+import System.Directory (createDirectoryIfMissing)
 import System.Exit (ExitCode (..))
+import System.FilePath (takeDirectory)
 import System.Process (createProcess, proc, waitForProcess)
 import Util (currentYearDay, getInputPath, getPuzzlePath)
 
 download :: DownloadType -> IO ()
 download (DownloadYear year) = downloadYear year
-download (DownloadDay year day) = downloadDay year day
-download DownloadToday = do
+download (DownloadDay (Specific year day)) = downloadDay year day
+download (DownloadDay Today) = do
   (year, day) <- currentYearDay
-  download (DownloadDay year day)
+  download (DownloadDay (Specific year day))
 
 downloadYear :: Int -> IO ()
 downloadYear year = do
@@ -23,6 +25,10 @@ downloadDay year day = do
   -- Get paths for input and puzzle files
   inputPath <- getInputPath year day
   puzzlePath <- getPuzzlePath year day
+
+  -- Ensure directories exist
+  createDirectoryIfMissing True (takeDirectory inputPath)
+  createDirectoryIfMissing True (takeDirectory puzzlePath)
 
   -- Construct the arguments for the `aoc` command
   let aocCommand = "aoc"

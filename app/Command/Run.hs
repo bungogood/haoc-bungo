@@ -1,14 +1,14 @@
 module Command.Run (run) where
 
-import Command.Parse (RunType (RunDay, RunToday))
+import Command.Parse (PuzzleDay (..))
 import Solver (getSolver, runSolver)
 import Util (currentYearDay, getInputPath)
 
-run :: RunType -> Maybe FilePath -> IO ()
-run (RunDay year day) input = runDay year day input
-run RunToday input = do
+run :: PuzzleDay -> Maybe FilePath -> IO ()
+run (Specific year day) input = runDay year day input
+run Today input = do
   (year, day) <- currentYearDay
-  run (RunDay year day) input
+  run (Specific year day) input
 
 -- Function to determine the input file path
 selectInput :: Int -> Int -> Maybe FilePath -> IO FilePath

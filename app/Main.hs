@@ -13,5 +13,5 @@ main = do
   case command of
     Setup {..} -> putStrLn $ "Setup for year: " ++ show year ++ ", day: " ++ show day
     Download {..} -> download downloadType
-    Run {..} -> run runType input
+    Run {..} -> run puzzleDay input
     Cookie {..} -> writeCookie cookie
