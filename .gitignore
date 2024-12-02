@@ -1,0 +1,17 @@
+# Editor
+.vscode/
+.idea/
+
+# Misc
+.DS_Store
+.env
+
+# Haskell
+dist-newstyle/
+dist/
+.stack-work/
+*~
+
+# Advent of Code
+puzzle/
+input/
