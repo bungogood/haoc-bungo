@@ -34,14 +34,16 @@ setupDay year day = do
       -- Do wierd codegen in `app/Solver.hs` to generate the solver
       addSolver year day
       -- Write the template to the file
-      writeFile filePath (generateModule (qualifiedName year day))
+      writeFile filePath (generateModule year day)
       putStrLn $ "Created: " ++ filePath
 
 -- Generate the module content
-generateModule :: String -> String
-generateModule name =
+generateModule :: Int -> Int -> String
+generateModule year day =
   unlines
-    [ "module " ++ name ++ " (Solution (..)) where",
+    [ "module " ++ qualifiedName year day ++ " (Solution (..)) where",
+      "",
+      "-- https://adventofcode.com/" ++ show year ++ "/day/" ++ show day,
       "",
       "import Lib",
       "",
