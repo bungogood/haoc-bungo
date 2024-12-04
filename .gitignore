@@ -16,3 +16,4 @@ haoc.cabal
 # Advent of Code
 puzzle/
 input/
+example/

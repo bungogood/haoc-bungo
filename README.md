@@ -1,5 +1,7 @@
 # Haoc
 
+[![Build](../../actions/workflows/haskell.yaml/badge.svg)](../../actions/workflows/haskell.yaml)
+
 Haskell Advent of Code Template and CLI tool, inspired by [Rust AOC](https://github.com/fspoettel/advent-of-code-rust).
 
 ## Installation

@@ -1,0 +1,38 @@
+name: Haskell CI
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build:
+        name: Build and Test
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout the repository
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            # Set up Haskell environment
+            - name: Set up Haskell
+              uses: haskell-actions/setup@v2
+              with:
+                  ghc-version: "9.10.1" # Exact version of ghc to use
+                  # cabal-version: 'latest'. Omitted, but defaults to 'latest'
+                  enable-stack: true
+                  stack-version: "latest"
+
+            # Install dependencies
+            - name: Install dependencies
+              run: stack setup && stack build --only-dependencies
+
+            # Build the project
+            - name: Build project
+              run: stack build
+
+            # Run tests
+            - name: Run tests
+              run: stack test
