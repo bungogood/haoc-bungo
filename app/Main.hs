@@ -14,5 +14,5 @@ main = do
   case command of
     Setup {..} -> setup puzzleDay
     Download {..} -> download downloadType
-    Run {..} -> run puzzleDay input
+    Run {..} -> run puzzleDay example input
     Cookie {..} -> writeCookie cookie

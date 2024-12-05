@@ -6,7 +6,7 @@ import Options.Applicative
 data Command
   = Setup {puzzleDay :: PuzzleDay}
   | Download {downloadType :: DownloadType}
-  | Run {puzzleDay :: PuzzleDay, input :: Maybe FilePath}
+  | Run {puzzleDay :: PuzzleDay, example :: Bool, input :: Maybe FilePath}
   | Cookie {cookie :: String}
   deriving (Show)
 
@@ -57,6 +57,11 @@ runParser :: Parser Command
 runParser =
   Run
     <$> puzzleDayParser
+    <*> switch
+      ( long "example"
+          <> short 'e'
+          <> help "Run the example input"
+      )
     <*> optional
       ( strOption
           ( long "input"
