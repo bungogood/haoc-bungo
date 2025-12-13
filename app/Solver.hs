@@ -35,6 +35,7 @@ import qualified Y2025.Day01
 import qualified Y2025.Day02
 import qualified Y2025.Day03
 import qualified Y2025.Day04
+import qualified Y2025.Day05
 -- REPLACE_IMPORTS_END
 
 data Solver = forall a. (Solvable a) => Solver a
@@ -78,5 +79,6 @@ getSolver year day =
     (2025, 2) -> Solver Y2025.Day02.Solution
     (2025, 3) -> Solver Y2025.Day03.Solution
     (2025, 4) -> Solver Y2025.Day04.Solution
+    (2025, 5) -> Solver Y2025.Day05.Solution
 -- REPLACE_CASES_END
     _ -> error "Invalid year or day"
