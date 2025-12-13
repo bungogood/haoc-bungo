@@ -2,7 +2,6 @@ module Y2025.Day02 (Solution (..)) where
 
 -- https://adventofcode.com/2025/day/2
 
-import Data.ByteString (find)
 import Data.List.Split (splitOn)
 import Data.Maybe (mapMaybe)
 import Lib
@@ -10,8 +9,8 @@ import Lib
 data Solution = Solution
 
 instance Solvable Solution where
-  part1 _ = show . sum . findInvalids1 . parse
-  part2 _ = show . sum . findInvalids . parse
+  part1 _ = show . sum . findInvalids invalidHalf . parse
+  part2 _ = show . sum . findInvalids invalidAny . parse
 
 parse :: String -> [(Int, Int)]
 parse = mapMaybe parseRange . splitOn ","
@@ -24,25 +23,20 @@ parseRange s = case splitOn "-" s of
 iterateRanges :: [(Int, Int)] -> [Int]
 iterateRanges = concatMap (\(a, b) -> [a .. b])
 
-findInvalids1 :: [(Int, Int)] -> [Int]
-findInvalids1 = filter isInvalid1 . iterateRanges
+findInvalids :: (Int -> Bool) -> [(Int, Int)] -> [Int]
+findInvalids p = filter p . iterateRanges
 
-isInvalid1 :: Int -> Bool
-isInvalid1 n = anyRepeatLen1 (show n)
+invalidHalf :: Int -> Bool
+invalidHalf n = even (length str) && repeats str (length str `div` 2)
+  where
+    str = show n
 
-anyRepeatLen1 :: String -> Bool
-anyRepeatLen1 str = even (length str) && repeatLen str (length str `div` 2)
+invalidAny :: Int -> Bool
+invalidAny n = any (repeats str) [1 .. length str `div` 2]
+  where
+    str = show n
 
-findInvalids :: [(Int, Int)] -> [Int]
-findInvalids = filter isInvalid . iterateRanges
-
-isInvalid :: Int -> Bool
-isInvalid n = anyRepeatLen (show n)
-
-anyRepeatLen :: String -> Bool
-anyRepeatLen str = any (repeatLen str) [1 .. length str `div` 2]
-
-repeatLen :: String -> Int -> Bool
-repeatLen str len = all (== head chunks) chunks
+repeats :: String -> Int -> Bool
+repeats str len = all (== head chunks) chunks
   where
     chunks = takeWhile (not . null) $ map (take len) (iterate (drop len) str)
