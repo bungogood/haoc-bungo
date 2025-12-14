@@ -1,17 +1,20 @@
 module Command.Run (run) where
 
 import Command.Parse (PuzzleDay (..))
+import Lib (setDebug)
 import Solver (Solver, getSolver, runSolver)
 import Util (currentYearDay, getExamplePath, getInputPath)
 
-run :: PuzzleDay -> Bool -> Maybe FilePath -> IO ()
-run (Specific year day) example input = do
+run :: PuzzleDay -> Bool -> Maybe FilePath -> Bool -> IO ()
+run (Specific year day) example input debug = do
   let solver = getSolver year day
   inputFile <- selectInput year day example input
+  -- set debug flag for solutions that read it
+  setDebug debug
   runSolverWithInput solver inputFile
-run Today example input = do
+run Today example input debug = do
   (year, day) <- currentYearDay
-  run (Specific year day) example input
+  run (Specific year day) example input debug
 
 -- Function to determine the input file path
 selectInput :: Int -> Int -> Bool -> Maybe FilePath -> IO FilePath

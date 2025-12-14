@@ -6,7 +6,7 @@ import Options.Applicative
 data Command
   = Setup {puzzleDay :: PuzzleDay}
   | Download {downloadType :: DownloadType}
-  | Run {puzzleDay :: PuzzleDay, example :: Bool, input :: Maybe FilePath}
+  | Run {puzzleDay :: PuzzleDay, example :: Bool, input :: Maybe FilePath, debug :: Bool}
   | Cookie {cookie :: String}
   deriving (Show)
 
@@ -69,6 +69,11 @@ runParser =
               <> metavar "FILE"
               <> help "Specify the input file (optional)"
           )
+      )
+    <*> switch
+      ( long "debug"
+          <> short 'd'
+          <> help "Enable debug output for the solution"
       )
 
 cookieParser :: Parser Command

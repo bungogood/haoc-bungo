@@ -13,9 +13,6 @@ import Lib
 
 data Solution = Solution
 
-debug :: Bool
-debug = False
-
 instance Solvable Solution where
   part1 _ = show . fst . uncurry processRows . parse
   part2 _ = show . sum . snd . uncurry processRows . parse
@@ -41,7 +38,7 @@ processRows (icnt, ivec) rows =
 processRow :: MV.MVector s Int -> Int -> String -> ST s Int
 processRow mv icnt row = do
   cnt <- applyRow mv row
-  when debug $ do
+  when getDebug $ do
     vec <- V.freeze mv
     traceShowM vec
   pure (icnt + cnt)
