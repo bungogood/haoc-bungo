@@ -32,6 +32,7 @@ dependencies:
     - text >= 2.0.2
     - bytestring >= 0.11
     - memory >= 0.18
+    - vector >= 0.12
 
 ghc-options:
     - -Wall

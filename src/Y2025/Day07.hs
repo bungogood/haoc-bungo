@@ -8,13 +8,17 @@ import Control.Monad (foldM, when)
 import Control.Monad.ST (ST, runST)
 import qualified Data.Vector as V
 import qualified Data.Vector.Mutable as MV
+import Debug.Trace (traceShowM)
 import Lib
 
 data Solution = Solution
 
+debug :: Bool
+debug = False
+
 instance Solvable Solution where
   part1 _ = show . fst . uncurry processRows . parse
-  part2 _ = undefined
+  part2 _ = show . sum . snd . uncurry processRows . parse
 
 parse :: String -> ((Int, V.Vector Int), [String])
 parse s = ((0, state), tail ls)
@@ -37,6 +41,9 @@ processRows (icnt, ivec) rows =
 processRow :: MV.MVector s Int -> Int -> String -> ST s Int
 processRow mv icnt row = do
   cnt <- applyRow mv row
+  when debug $ do
+    vec <- V.freeze mv
+    traceShowM vec
   pure (icnt + cnt)
 
 applyRow :: MV.MVector s Int -> String -> ST s Int
@@ -51,6 +58,7 @@ applyRow mv row =
 
 updateNeighbors :: MV.MVector s Int -> Int -> ST s ()
 updateNeighbors mv i = do
+  v <- MV.read mv i
   MV.write mv i 0
-  when (i > 0) $ MV.write mv (i - 1) 1
-  when (i < MV.length mv - 1) $ MV.write mv (i + 1) 1
+  when (i > 0) $ MV.modify mv (+ v) (i - 1)
+  when (i < MV.length mv - 1) $ MV.modify mv (+ v) (i + 1)
